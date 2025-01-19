@@ -1,34 +1,26 @@
+import axios from 'axios';
 
-import { GoogleAuth } from 'google-auth-library';
-import { google } from 'googleapis';
-
-const auth = new GoogleAuth({
-    scopes: 'https://www.googleapis.com/auth/drive',
+const apiClient = axios.create({
+    params: {
+        key: import.meta.env.VITE_API_KEY
+    }
 });
-
-const api = google.drive({ version: 'v3', auth });
 
 export const PhotosApi = {
 
+    getParentFolder: () => {
+        return PhotosApi.getFolderById('1SPM0RIgHSuvE0YxDCNKBNuOQBZLWQ8ZA');
+    },
 
-
-    getPhotos: async () => {
-        const files = [];
-        try {
-            const res = await api.files.list({
-                // q: 'mimeType=\'image/jpeg\'',
-                fields: 'nextPageToken, files(id, name)',
-                spaces: 'drive',
-            });
-            Array.prototype.push.apply(files, res.files);
-            res.data.files.forEach(function (file) {
-                console.log('Found file:', file.name, file.id);
-            });
-
-            return res.data.files;
-        } catch (err) {
-            // TODO(developer) - Handle error
-            throw err;
-        }
+    getFolderById: async (folderId: string) => {
+        const response = await apiClient.get('https://www.googleapis.com/drive/v3/files', {
+            params: {
+                q: `'${folderId}' in parents`
+            }
+        });
+        return response.data;
     }
+
+    // https://www.googleapis.com/drive/v3/files?q=%271SPM0RIgHSuvE0YxDCNKBNuOQBZLWQ8ZA%27+in+parents&key=AIzaSyD3DD_QwaMMOVe7ilyXvW8etFvsN7SQ-m4
+    // https://www.googleapis.com/drive/v3/files?key=AIzaSyD3DD_QwaMMOVe7ilyXvW8etFvsN7SQ-m4&q=%271SPM0RIgHSuvE0YxDCNKBNuOQBZLWQ8ZA%27%2Bin%2Bparents
 }

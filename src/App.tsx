@@ -1,10 +1,17 @@
+import { RouterProvider } from "react-router";
+import { createBrowserRouter } from 'react-router-dom';
+import { Gallery } from "./components/Gallery/Gallery";
 
 function App() {
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      Component() { return <Gallery /> },
+    },
+  ]);
 
   return (
-    <>
-      Hello, World
-    </>
+    <RouterProvider router={router} />
   )
 }
 

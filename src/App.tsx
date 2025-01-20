@@ -1,6 +1,6 @@
 import { RouterProvider } from "react-router";
 import { createBrowserRouter } from 'react-router-dom';
-import { Gallery } from "./components/Gallery/Gallery";
+import { Gallery } from "./components/Gallery";
 
 function App() {
   const router = createBrowserRouter([

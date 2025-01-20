@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
+import { Gallery } from '../types/Gallery';
 
 const apiClient = axios.create({
     params: {
@@ -7,16 +8,14 @@ const apiClient = axios.create({
     baseURL: 'https://www.googleapis.com/drive/v3/files'
 });
 
-const mapToData = ({ data }: AxiosResponse) => data;
+const mapToData = ({ data }: AxiosResponse) => data.files;
 
 export const PhotosApi = {
 
-    getParentFolder: () => PhotosApi.getFolderById(import.meta.env.VITE_FOLDER_KEY),
-    getFolderById: (folderId: string) => {
-        return apiClient.get('', {
-            params: {
-                q: `'${folderId}' in parents`
-            }
-        }).then(mapToData)
-    }
+    getParentFolder: (): Promise<Gallery[]> => PhotosApi.getFolderById(import.meta.env.VITE_FOLDER_KEY),
+    getFolderById: (folderId: string): Promise<any> => apiClient.get('', {
+        params: {
+            q: `'${folderId}' in parents`
+        }
+    }).then(mapToData),
 }

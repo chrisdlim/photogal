@@ -1,12 +1,12 @@
 import { RouterProvider } from "react-router";
 import { createBrowserRouter } from 'react-router-dom';
-import { Gallery } from "./components/Gallery";
+import { GalleryList } from "./components/GalleryList";
 
 function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      Component() { return <Gallery /> },
+      Component() { return <GalleryList /> },
     },
   ]);
 

@@ -1,26 +1,22 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 const apiClient = axios.create({
     params: {
         key: import.meta.env.VITE_API_KEY
-    }
+    },
+    baseURL: 'https://www.googleapis.com/drive/v3/files'
 });
+
+const mapToData = ({ data }: AxiosResponse) => data;
 
 export const PhotosApi = {
 
-    getParentFolder: () => {
-        return PhotosApi.getFolderById('1SPM0RIgHSuvE0YxDCNKBNuOQBZLWQ8ZA');
-    },
-
-    getFolderById: async (folderId: string) => {
-        const response = await apiClient.get('https://www.googleapis.com/drive/v3/files', {
+    getParentFolder: () => PhotosApi.getFolderById(import.meta.env.VITE_FOLDER_KEY),
+    getFolderById: (folderId: string) => {
+        return apiClient.get('', {
             params: {
                 q: `'${folderId}' in parents`
             }
-        });
-        return response.data;
+        }).then(mapToData)
     }
-
-    // https://www.googleapis.com/drive/v3/files?q=%271SPM0RIgHSuvE0YxDCNKBNuOQBZLWQ8ZA%27+in+parents&key=AIzaSyD3DD_QwaMMOVe7ilyXvW8etFvsN7SQ-m4
-    // https://www.googleapis.com/drive/v3/files?key=AIzaSyD3DD_QwaMMOVe7ilyXvW8etFvsN7SQ-m4&q=%271SPM0RIgHSuvE0YxDCNKBNuOQBZLWQ8ZA%27%2Bin%2Bparents
 }
